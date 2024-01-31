@@ -8,42 +8,42 @@
 using namespace std;
 
 struct Bitacora {
- string mes;
- int dia;
- string hora;
- string ipOrigen;
- int puerto;
- string razonFalla;
+    string mes;
+    int dia;
+    string hora;
+    string ipOrigen;
+    int puerto;
+    string razonFalla;
 };
 
 void leerArchivo(const string& bitacora, vector<Bitacora>& bitacora1, map<string, int>& accesosIP) {
- ifstream archivo(bitacora);
+    ifstream archivo(bitacora);
 
- if (!archivo) {
-   cerr << "No se pudo abrir el archivo." << endl;
-   return;
- }
+    if (!archivo) {
+        cerr << "No se pudo abrir el archivo." << endl;
+        return;
+    }
 
- map<string, int> meses = {{"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4}, {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8}, {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}};
+    map<string, int> meses = {{"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4}, {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8}, {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}};
 
- string mes, hora, ip, razonFalla;
- int dia, puerto;
+    string mes, hora, ip, razonFalla;
+    int dia, puerto;
 
- while (archivo >> mes >> dia >> hora >> ip >> puerto >> razonFalla) {
-   Bitacora b;
-   b.mes = meses[mes];
-   b.dia = dia;
-   b.hora = hora;
-   b.ipOrigen = ip + ":" + to_string(puerto);
-   b.razonFalla = razonFalla;
+    while (archivo >> mes >> dia >> hora >> ip >> puerto >> razonFalla) {
+        Bitacora b;
+        b.mes = meses[mes];
+        b.dia = dia;
+        b.hora = hora;
+        b.ipOrigen = ip + ":" + to_string(puerto);
+        b.razonFalla = razonFalla;
 
-   bitacora1.push_back(b);
+        bitacora1.push_back(b);
 
-   // Incrementar el contador de accesos para esta IP
-   accesosIP[ip]++;
- }
+        // Incrementar el contador de accesos para esta IP
+        accesosIP[ip]++;
+    }
 
- archivo.close();
+    archivo.close();
 }
 
 int main() {
@@ -55,9 +55,11 @@ int main() {
 
     set<pair<int, string>> bstAccesosIP(accesosIP.begin(), accesosIP.end());
 
-    // Imprimir el BST
-    for (auto& acceso : bstAccesosIP) {
-        cout << "IP: " << acceso.second << ", Accesos: " << acceso.first << endl;
+    cout << "Las 5 direcciones IP con más accesos son:" << endl;
+
+    int count = 0;
+    for (auto it = bstAccesosIP.rbegin(); it != bstAccesosIP.rend() && count < 5; ++it, ++count) {
+        cout << "IP: " << it->second << ", Accesos: " << it->first << endl;
     }
 
     return 0;
